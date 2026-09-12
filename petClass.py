@@ -25,4 +25,16 @@ class bird(pet):
 class rabbit(pet):
     pass    
 
+def create_pet(pet_type: str, breed: str, name: str, age: int, chip_number: int, owner: str):
+    pet_type = pet_type.lower()
+    if pet_type == "dog":
+        return dog(breed, name, age, chip_number, owner)
+    elif pet_type == "cat":
+        return cat(breed, name, age, chip_number, owner)
+    elif pet_type == "bird":
+        return bird(breed, name, age, chip_number, owner)
+    elif pet_type == "rabbit":
+        return rabbit(breed, name, age, chip_number, owner)
+    else:
+        raise ValueError(f"Invalid pet type: {pet_type}. Valid types are: dog, cat, bird, rabbit.") 
 
