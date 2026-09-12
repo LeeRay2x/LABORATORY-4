@@ -3,6 +3,7 @@ from petClass import create_pet
 from appointment import Appointment
 from clinic_database import ClinicDatabase
 from datetime import datetime
+import random
 
 def main():
     database = ClinicDatabase()
@@ -22,15 +23,21 @@ def main():
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            owner_id = input("Enter Owner ID: ")
-            name = input("Enter Owner Name: ")
+            name = input("\nEnter Owner Name: ")
             contact_number = input("Enter Contact Number: ")
+
+            while True:
+                owner_id = "O" + str(random.randint(1000, 9999))
+
+                if database.get_owner(owner_id) is None:
+                    break
 
             owner = PetOwner(owner_id, name, contact_number)
 
             try:
                 database.register_owner(owner)
                 print("Pet owner registered successfully.")
+                print("Generated Owner ID:", owner_id)
             except ValueError as e:
                 print(e)
 
@@ -46,8 +53,7 @@ def main():
                     print(owner)
 
         elif choice == "3":
-            pet_type = input("Enter Pet Type (Dog/Cat/Bird/Rabbit): ")
-            pet_id = input("Enter Pet ID: ")
+            pet_type = input("\nEnter Pet Type (Dog/Cat/Bird/Rabbit): ")
             name = input("Enter Pet Name: ")
             age = int(input("Enter Pet Age: "))
             owner_id = input("Enter Owner ID: ")
@@ -58,7 +64,14 @@ def main():
                 print("Owner not found.")
             else:
                 breed = input("Enter Breed: ")
-                chip_number = int(input("Enter Chip Number: "))
+
+                while True:
+                    pet_id = "P" + str(random.randint(1000, 9999))
+
+                    if database.get_pet(pet_id) is None:
+                        break
+
+                chip_number = random.randint(100000000000000, 999999999999999)
 
                 pet = create_pet(
                     pet_type,
@@ -73,6 +86,8 @@ def main():
                 try:
                     database.add_pet(pet)
                     print("Pet added successfully.")
+                    print("Generated Pet ID:", pet_id)
+                    print("Generated Chip Number:", chip_number)
                 except ValueError as e:
                     print(e)
 
@@ -88,8 +103,7 @@ def main():
                     print(pet)
 
         elif choice == "5":
-            appointment_id = input("Enter Appointment ID: ")
-            owner_id = input("Enter Owner ID: ")
+            owner_id = input("\nEnter Owner ID: ")
             pet_id = input("Enter Pet ID: ")
 
             owner = database.get_owner(owner_id)
@@ -109,6 +123,12 @@ def main():
                     "%Y-%m-%d %H:%M"
                 )
 
+                while True:
+                    appointment_id = "A" + str(random.randint(1000, 9999))
+
+                    if database.get_appointment(appointment_id) is None:
+                        break
+
                 appointment = Appointment(
                     appointment_id,
                     owner,
@@ -120,6 +140,7 @@ def main():
                 try:
                     database.schedule_appointment(appointment)
                     print("Appointment scheduled successfully.")
+                    print("Generated Appointment ID:", appointment_id)
                 except ValueError as e:
                     print(e)
 
@@ -135,7 +156,7 @@ def main():
                     print(appointment)
 
         elif choice == "7":
-            appointment_id = input("Enter Appointment ID to cancel: ")
+            appointment_id = input("\nEnter Appointment ID to cancel: ")
 
             try:
                 database.cancel_appointment(appointment_id)
@@ -144,7 +165,7 @@ def main():
                 print(e)
 
         elif choice == "8":
-            appointment_id = input("Enter Appointment ID: ")
+            appointment_id = input("\nEnter Appointment ID: ")
             status = input(
                 "Enter new status (Scheduled/Completed/Cancelled): "
             )
@@ -159,7 +180,7 @@ def main():
                 print(e)
 
         elif choice == "9":
-            print("Thank you for using Paws and Care Veterinary Clinic!")
+            print("\nThank you for using Paws and Care Veterinary Clinic!")
             break
 
         else:
