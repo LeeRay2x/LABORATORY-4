@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime
 
 from owner import PetOwner
-from petClass import dog, cat, bird, rabbit, create_pet
+from petClass import create_pet
 from appointment import Appointment
 from clinic_database import ClinicDatabase
 
@@ -45,7 +45,7 @@ class TestClinic(unittest.TestCase):
         )
 
     def test_add_pet_record(self):
-        pet = PetFactory.create_pet(
+        pet = create_pet(
             "Dog",
             "P001",
             "Buddy",
@@ -71,7 +71,7 @@ class TestClinic(unittest.TestCase):
         )
 
     def test_schedule_appointment(self):
-        pet = PetFactory.create_pet(
+        pet = create_pet(
             "Cat",
             "P002",
             "Milo",
@@ -102,7 +102,7 @@ class TestClinic(unittest.TestCase):
         )
 
     def test_cancel_appointment(self):
-        pet = PetFactory.create_pet(
+        pet = create_pet(
             "Bird",
             "P003",
             "Sunny",
