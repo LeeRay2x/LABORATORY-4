@@ -1,0 +1,169 @@
+from owner import PetOwner
+from petClass import create_pet
+from appointment import Appointment
+from clinic_database import ClinicDatabase
+from datetime import datetime
+
+def main():
+    database = ClinicDatabase()
+
+    while True:
+        print("\n===== PAWS AND CARE VETERINARY CLINIC =====")
+        print("1. Register Pet Owner")
+        print("2. View Pet Owners")
+        print("3. Add Pet")
+        print("4. View Pets")
+        print("5. Schedule Appointment")
+        print("6. View Appointments")
+        print("7. Cancel Appointment")
+        print("8. Update Appointment Status")
+        print("9. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            owner_id = input("Enter Owner ID: ")
+            name = input("Enter Owner Name: ")
+            contact_number = input("Enter Contact Number: ")
+
+            owner = PetOwner(owner_id, name, contact_number)
+
+            try:
+                database.register_owner(owner)
+                print("Pet owner registered successfully.")
+            except ValueError as e:
+                print(e)
+
+        elif choice == "2":
+            owners = database.get_owners()
+
+            if len(owners) == 0:
+                print("No pet owners registered.")
+            else:
+                print("\n===== PET OWNERS =====")
+
+                for owner in owners:
+                    print(owner)
+
+        elif choice == "3":
+            pet_type = input("Enter Pet Type (Dog/Cat/Bird/Rabbit): ")
+            pet_id = input("Enter Pet ID: ")
+            name = input("Enter Pet Name: ")
+            age = int(input("Enter Pet Age: "))
+            owner_id = input("Enter Owner ID: ")
+
+            owner = database.get_owner(owner_id)
+
+            if owner is None:
+                print("Owner not found.")
+            else:
+                breed = input("Enter Breed: ")
+                chip_number = int(input("Enter Chip Number: "))
+
+                pet = create_pet(
+                    pet_type,
+                    pet_id,
+                    name,
+                    age,
+                    owner,
+                    breed,
+                    chip_number
+                )
+
+                try:
+                    database.add_pet(pet)
+                    print("Pet added successfully.")
+                except ValueError as e:
+                    print(e)
+
+        elif choice == "4":
+            pets = database.get_pets()
+
+            if len(pets) == 0:
+                print("No pets registered.")
+            else:
+                print("\n===== PETS =====")
+
+                for pet in pets:
+                    print(pet)
+
+        elif choice == "5":
+            appointment_id = input("Enter Appointment ID: ")
+            owner_id = input("Enter Owner ID: ")
+            pet_id = input("Enter Pet ID: ")
+
+            owner = database.get_owner(owner_id)
+            pet = database.get_pet(pet_id)
+
+            if owner is None:
+                print("Owner not found.")
+            elif pet is None:
+                print("Pet not found.")
+            else:
+                date = input("Enter appointment date (YYYY-MM-DD): ")
+                time = input("Enter appointment time (HH:MM): ")
+                reason = input("Enter reason: ")
+
+                date_time = datetime.strptime(
+                    date + " " + time,
+                    "%Y-%m-%d %H:%M"
+                )
+
+                appointment = Appointment(
+                    appointment_id,
+                    owner,
+                    pet,
+                    date_time,
+                    reason
+                )
+
+                try:
+                    database.schedule_appointment(appointment)
+                    print("Appointment scheduled successfully.")
+                except ValueError as e:
+                    print(e)
+
+        elif choice == "6":
+            appointments = database.get_appointments()
+
+            if len(appointments) == 0:
+                print("No appointments scheduled.")
+            else:
+                print("\n===== APPOINTMENTS =====")
+
+                for appointment in appointments:
+                    print(appointment)
+
+        elif choice == "7":
+            appointment_id = input("Enter Appointment ID to cancel: ")
+
+            try:
+                database.cancel_appointment(appointment_id)
+                print("Appointment cancelled successfully.")
+            except ValueError as e:
+                print(e)
+
+        elif choice == "8":
+            appointment_id = input("Enter Appointment ID: ")
+            status = input(
+                "Enter new status (Scheduled/Completed/Cancelled): "
+            )
+
+            try:
+                database.update_appointment_status(
+                    appointment_id,
+                    status
+                )
+                print("Appointment status updated successfully.")
+            except ValueError as e:
+                print(e)
+
+        elif choice == "9":
+            print("Thank you for using Paws and Care Veterinary Clinic!")
+            break
+
+        else:
+            print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    main()
