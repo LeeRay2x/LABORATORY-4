@@ -1,4 +1,4 @@
-class pet:
+class pet:                # create each pet info as object
     def __init__(self, breed: str, name: str, age: int, chip_number: int, owner: str):
         self.breed = breed
         self.name = name
@@ -25,7 +25,7 @@ class bird(pet):
 class rabbit(pet):
     pass    
 
-def create_pet(pet_type: str, breed: str, name: str, age: int, chip_number: int, owner: str):
+def create_pet(pet_type: str, breed: str, name: str, age: int, chip_number: int, owner: str):        # we create per for each type
     pet_type = pet_type.lower()
     if pet_type == "dog":
         return dog(breed, name, age, chip_number, owner)
